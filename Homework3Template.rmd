@@ -1,0 +1,59 @@
+---
+title: "[LAST NAME], [FIRST NAME], [STUDENT NUMBER] - Homework 3"
+author: "[LAST NAME], [FIRST NAME], [STUDENT NUMBER]"
+output: html_document
+---
+
+Please read all instructions carefully.  Fill in all fields above (Espicially your student number) and remove square brackets. To allow this file to be knit, you might need to save it in a new location, as you do not have write permissions in the dropbox folder, and R does not work well with Chinese characters.
+Do not comment out the lines that produce output.  Check your html file before submission to ensure it has all relevant output. Do not delete anything below these instructions.  Thank you! 
+
+
+
+**Question 1A:**
+```{r Question 1A}
+#TRAIN AND ESTIMATE YOUR FIRST MODEL (WITHOUT EXPENDITURE) HERE
+#Final line in this chunk should be something like 'chosenModel = lm(....
+```
+
+
+
+**Question 1B:**
+```{r Question 1B}
+#TRAIN AND ESTIMATE YOUR SECOND MODEL (WITH EXPENDITURES) HERE
+#Final line in this chunk should be something like 'chosenModel = earth(....
+
+```
+
+
+```{r}
+#Fill in your student number in the line below to generate the RData file for submission. DO NOT CHANGE ANYTHING ELSE ABOUT THE CODE BELOW.
+studentNum = #Student number goes just before this 
+
+#This reduces the file size in some cases fringe cases
+chosenModel$cv.list = NULL
+chosenModel$cv.oof.fit.tab = NULL
+chosenModel$varmod = NULL
+
+chosenModel2$cv.list = NULL
+chosenModel2$cv.oof.fit.tab = NULL
+chosenModel2$varmod = NULL
+
+save(chosenModel, chosenModel2, file = paste0(studentNum,'.Rdata'))
+
+#The following code checks if you generated the models correctly.  Run it, and if you see 'looks good!' pop up twice then your Rdata file is ready. Do not alter it any way - not even to change the variable names.  If not, please correct, or contact the TAs for help 
+load(paste0(studentNum,'.Rdata'))
+rightType = class(chosenModel)=='earth'|class(chosenModel)=='lm'
+rightType2 = class(chosenModel2)=='earth'|class(chosenModel2)=='lm'
+if(class(chosenModel)=='earth'){
+	noExpend = !grepl('[^-]expenditure',paste(rownames(chosenModel$coefficients),collapse=''))
+}  else {
+	noExpend = !grepl('[^-]expenditure',paste(names(chosenModel$coefficients),collapse=''))
+}
+
+if(rightType&rightType2&noExpend){ 
+	print('Looks Good!')
+} else {
+	print('Mistake - Check that you are saving lm and earth models, and that expenditure is not in the first model')
+}
+
+```
